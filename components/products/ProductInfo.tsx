@@ -14,6 +14,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFavorite } from "@/components/FavoriteContext";
+import { Skeleton } from "../ui/skeleton";
+import { FavoriteItemSkeleton } from "../FavoriteLoader";
+import Image from "next/image";
 
 type Product = {
   id: string;
@@ -70,24 +73,7 @@ function ProductInfo({ productId }: { productId: string }) {
   };
 
   if (loading) {
-    return (
-      <Card className="mb-6 overflow-hidden shadow-md rounded-xl">
-        <div className="animate-pulse p-6">
-          <div className="flex gap-6">
-            <div className="rounded-lg bg-gray-200 h-40 w-40"></div>
-            <div className="flex-1 space-y-4 py-2">
-              <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-              <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-              <div className="space-y-2 pt-4">
-                <div className="h-4 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-    );
+    return <FavoriteItemSkeleton />;
   }
 
   if (error || !product) {
@@ -113,7 +99,7 @@ function ProductInfo({ productId }: { productId: string }) {
   };
 
   return (
-    <Card className="mb-6 overflow-hidden rounded-xl border-0 shadow-lg transition-all duration-300 hover:shadow-xl max-w-2xl">
+    <Card className="mb-6 overflow-hidden rounded-xl border-0 shadow-lg transition-all duration-300 hover:shadow-xl max-w-5xl">
       {isExpanded ? (
         // Expanded View
         <div className="p-0">
@@ -151,7 +137,7 @@ function ProductInfo({ productId }: { productId: string }) {
           <div className="grid md:grid-cols-2 gap-6 p-6">
             {/* Product Image - Left Column */}
             <div className="flex items-center justify-center bg-white rounded-lg p-4">
-              <img
+              <Image
                 src={product.image || "/api/placeholder/400/400"}
                 alt={product.name}
                 className="object-contain w-full max-h-80 rounded-lg shadow-sm"

@@ -59,14 +59,13 @@ export default function Hero() {
           >
             <AnimatedText text="Elevate Your Everyday" />
           </motion.span>
-          <br/>
+          <br />
           <motion.span
-            className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-400 bg-clip-text text-transparent"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.5 }}
           >
-            
             With Thoughtful Design
           </motion.span>
         </motion.h1>
@@ -91,9 +90,9 @@ export default function Hero() {
           <Button
             asChild
             size="lg"
-            className="px-8 group relative overflow-hidden"
+            className="px-8 group bg-indigo-600  hover:bg-indigo-700 relative overflow-hidden"
           >
-            <Link href="/products" className="flex items-center">
+            <Link href="/products" className="flex z-50 items-center">
               Shop Collection
               <motion.div
                 className="ml-2"
@@ -102,7 +101,6 @@ export default function Hero() {
               >
                 <ArrowRight className="h-4 w-4" />
               </motion.div>
-              <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform group-hover:duration-500"></span>
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="group">
@@ -150,7 +148,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
-          > 
+          >
             New Collection
           </motion.div>
         </div>

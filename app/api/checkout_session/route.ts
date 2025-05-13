@@ -3,10 +3,9 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const data = await req.json();
   const { items } = data;
-  console.log(typeof items[0].price);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -16,14 +15,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
           price_data: {
             currency: "inr",
             product_data: { name: item.name },
-            unit_amount: item.price*100,
+            unit_amount: item.price * 100,
           },
           quantity: item.quantity,
         })
       ),
       mode: "payment",
-      success_url: `http://localhost:3000/success?success=true`,
-      cancel_url: `http://localhost:3000/success/?canceled=true`,
+      success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:3000/success/?session_id={CHECKOUT_SESSION_ID}`,
     });
     console.log(session);
     return NextResponse.json(

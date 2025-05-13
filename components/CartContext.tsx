@@ -4,6 +4,7 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { z } from "zod";
@@ -35,6 +36,14 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
       quantity: 0,
     },
   ]);
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      setCart(parsedCart);
+    }
+  }, []);
 
   return (
     <cartContext.Provider value={{ cart, setCart }}>

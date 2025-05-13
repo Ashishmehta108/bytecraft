@@ -8,6 +8,6 @@ export async function GET(req: Request) {
   console.log("this is search", search);
 
   const products = await fetchAllProducts({ search: search });
-  console.log(products);
+
   return NextResponse.json(products);
 }
