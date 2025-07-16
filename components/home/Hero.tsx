@@ -8,14 +8,14 @@ import { ArrowRight, ChevronRight, Star } from "lucide-react";
 import "../../app/globals.css";
 const AnimatedText = ({ text }: { text: string }) => {
   return (
-    <span className="inline ">
+    <span className="sm:inline ">
       {text.split("").map((char, index) => (
         <motion.span
           key={index}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.15, delay: index * 0.05 }}
-          className="inline"
+          className="inline "
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>
@@ -25,25 +25,21 @@ const AnimatedText = ({ text }: { text: string }) => {
 };
 export default function Hero() {
   return (
-    <section className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center overflow-hidden -translate-y-10 max-w-7xl">
+    <section className="relative container  mx-auto grid grid-cols-1  lg:grid-cols-2 p-0 lg:gap-12 items-center overflow-hidden -translate-y-10 max-w-7xl ">
       <motion.div
-        className="space-y-6 relative"
+        className="space-y-6 relative container max-w-xl mx-auto "
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
       >
         <div className="flex items-center space-x-2 mb-2">
-          <motion.span
-            className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
+          <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-xs">
             Discover Something Different
-          </motion.span>
+          </span>
         </div>
 
         <motion.h1
-          className="max-w-2xl font-bold text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight"
+          className="max-w-2xl container mx-auto font-bold text-3xl md:text-5xl xl:text-6xl tracking-tight leading-tight"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -61,7 +57,7 @@ export default function Hero() {
           </motion.span>
           <br />
           <motion.span
-            className="bg-gradient-to-br from-neutral-900 to-neutral-400 bg-clip-text text-transparent"
+            className="bg-gradient-to-br from-neutral-900 to-neutral-400 dark:from-neutral-200 to-neutral-700 bg-clip-text text-transparent"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.5 }}
@@ -71,7 +67,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="max-w-xl text-lg leading-8 text-muted-foreground"
+          className="max-w-xl text-sm leading-5 text-muted-foreground"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -90,29 +86,21 @@ export default function Hero() {
           <Button
             asChild
             size="lg"
-            className="px-8 group bg-indigo-600  hover:bg-indigo-700 relative overflow-hidden"
+            className="px-8 group bg-indigo-600  hover:bg-indigo-700 dark:text-white  relative overflow-hidden"
           >
             <Link href="/products" className="flex z-50 items-center">
               Shop Collection
-              <motion.div
-                className="ml-2"
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
+              <div className="ml-2">
                 <ArrowRight className="h-4 w-4" />
-              </motion.div>
+              </div>
             </Link>
           </Button>
-          <Button asChild size="lg" variant="outline" className="group">
+          <Button asChild size="lg" variant="outline" className="group ">
             <Link href="/about" className="flex items-center">
               Our Story
-              <motion.div
-                className="ml-1"
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
+              <div className="ml-1">
                 <ChevronRight className="h-4 w-4" />
-              </motion.div>
+              </div>
             </Link>
           </Button>
         </motion.div>
@@ -144,7 +132,7 @@ export default function Hero() {
         <div className="relative  w-[82%] h-[80%] mx-auto">
           <HeroCarousel />
           <motion.div
-            className=" absolute hidden md:block bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium"
+            className=" absolute hidden lg:block bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 1 }}

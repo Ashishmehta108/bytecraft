@@ -16,32 +16,32 @@ function ProductsGridSkeleton({ count = 6 }: { count?: number }) {
         .map((_, index) => (
           <Card
             key={index}
-            className="relative overflow-hidden border-0 shadow-md bg-white rounded-xl"
+            className="relative overflow-hidden border-0 shadow-md bg-white dark:bg-neutral-900 rounded-xl"
           >
             <CardContent className="p-0">
               {/* Favorite Button Skeleton */}
               <div className="absolute z-10 top-4 right-4">
-                <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+                <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-neutral-700 animate-pulse"></div>
               </div>
 
               {/* Image Container Skeleton */}
-              <div className="relative w-full h-72 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+              <div className="relative w-full h-72 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-800 dark:to-neutral-700 overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-32 h-32 rounded-full bg-gray-200 animate-pulse"></div>
+                  <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-neutral-600 animate-pulse"></div>
                 </div>
               </div>
 
               {/* Product Details Skeleton */}
-              <div className="p-6 bg-white">
+              <div className="p-6 bg-white dark:bg-neutral-900">
                 {/* Category Pills Skeleton */}
                 <div className="flex gap-1 mb-3">
-                  <div className="w-16 h-6 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="w-14 h-6 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="w-20 h-6 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="w-16 h-6 bg-gray-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
+                  <div className="w-14 h-6 bg-gray-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
+                  <div className="w-20 h-6 bg-gray-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
                 </div>
 
                 {/* Product Name Skeleton */}
-                <div className="w-3/4 h-7 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                <div className="w-3/4 h-7 bg-gray-200 dark:bg-neutral-700 rounded-md animate-pulse mb-2"></div>
 
                 {/* Rating Skeleton */}
                 <div className="flex items-center mt-2 mb-4">
@@ -49,21 +49,21 @@ function ProductsGridSkeleton({ count = 6 }: { count?: number }) {
                     {[...Array(5)].map((_, i) => (
                       <div
                         key={i}
-                        className="w-4 h-4 bg-gray-200 rounded-sm animate-pulse"
+                        className="w-4 h-4 bg-gray-200 dark:bg-neutral-700 rounded-sm animate-pulse"
                       ></div>
                     ))}
                   </div>
-                  <div className="w-16 h-4 ml-2 bg-gray-200 rounded-md animate-pulse"></div>
+                  <div className="w-16 h-4 ml-2 bg-gray-200 dark:bg-neutral-700 rounded-md animate-pulse"></div>
                 </div>
 
                 {/* Price and Stock Status Skeleton */}
                 <div className="mt-4 flex justify-between items-center">
-                  <div className="w-20 h-7 bg-gray-200 rounded-md animate-pulse"></div>
-                  <div className="w-16 h-6 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="w-20 h-7 bg-gray-200 dark:bg-neutral-700 rounded-md animate-pulse"></div>
+                  <div className="w-16 h-6 bg-gray-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
                 </div>
 
                 {/* Button Skeleton */}
-                <div className="mt-4 w-full h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+                <div className="mt-4 w-full h-10 bg-gray-200 dark:bg-neutral-700 rounded-lg animate-pulse"></div>
               </div>
             </CardContent>
           </Card>
@@ -108,10 +108,10 @@ function ProductsContainer({
       {/* HEADER */}
       <section>
         <div className="flex justify-between items-center">
-          <h4 className="font-medium text-lg">
+          <h4 className="font-medium text-lg text-gray-900 dark:text-neutral-100">
             {totalProducts} product{totalProducts > 1 && "s"}
           </h4>
-          <div className="flex gap-x-4">
+          {/* <div className="flex gap-x-4">
             <Button
               variant={layout === "grid" ? "default" : "ghost"}
               size="icon"
@@ -120,8 +120,8 @@ function ProductsContainer({
               <Link href={`/products?layout=grid${searchTerm}`}>
                 <LuLayoutGrid />
               </Link>
-            </Button>
-            <Button
+            </Button> */}
+          {/* <Button
               variant={layout === "list" ? "default" : "ghost"}
               size="icon"
               asChild
@@ -129,19 +129,27 @@ function ProductsContainer({
               <Link href={`/products?layout=list${searchTerm}`}>
                 <LuList />
               </Link>
-            </Button>
-          </div>
+            </Button> */}
+          {/* </div> */}
         </div>
-        <Separator className="mt-4" />
+        <Separator className="mt-4 dark:bg-neutral-800" />
       </section>
       {/* PRODUCTS */}
       <div>
         {totalProducts === 0 ? (
           <ProductsGridSkeleton count={6} />
         ) : layout === "grid" ? (
+          //@ts-ignore
           <ProductsGrid products={products} />
         ) : (
-          <ProductsList products={products} />
+          //@
+          <ProductsList
+            products={products.map((product) => ({
+              ...product,
+              type: (product as any).type ?? "",
+              areaOfUse: (product as any).areaOfUse ?? "",
+            }))}
+          />
         )}
       </div>
     </>

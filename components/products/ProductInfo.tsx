@@ -48,7 +48,7 @@ function ProductInfo({ productId }: { productId: string }) {
           throw new Error(`Failed to fetch product: ${res.status}`);
         }
 
-        const data = await res.json();
+        const data = await res.json();  
         setProduct(data);
         setError(null);
       } catch (err) {

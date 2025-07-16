@@ -4,9 +4,9 @@ import { DiDebian } from "react-icons/di";
 
 function Logo() {
   return (
-    <Button size='icon' asChild>
+    <Button size='icon' className='' asChild>
       <Link href='/'>
-        <DiDebian className='w-6 h-6' />
+        <DiDebian className='w-6 h-6 ' />
       </Link>
     </Button>
   );

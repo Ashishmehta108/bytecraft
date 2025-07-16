@@ -3,6 +3,7 @@ import { FaHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useFavorite } from "../FavoriteContext";
 import { useEffect, useState } from "react";
+import { Heart } from "iconsax-reactjs";
 
 function FavoriteToggleButton({ productId }: { productId: string }) {
   const { favorite, addfavorite, removefavorite } = useFavorite();
@@ -24,12 +25,16 @@ function FavoriteToggleButton({ productId }: { productId: string }) {
     <Button
       size="icon"
       variant="outline"
-      className={`p-2 ${
-        isFavorite ? "text-red-500" : "text-black-500"
+      className={`p-2  ${
+        isFavorite ? "text-red-500" : "text-neutral-800"
       } hover:text-red-500 cursor-pointer`}
       onClick={toggleFavorite}
     >
-      <FaHeart />
+      <Heart
+        fill="red"
+        className=""
+        variant={isFavorite ? "Bold" : "Linear"}
+      />
     </Button>
   );
 }

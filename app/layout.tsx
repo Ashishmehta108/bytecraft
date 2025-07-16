@@ -4,11 +4,16 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Container from "@/components/global/Container";
 import Providers from "./providers";
-const inter = Inter({ subsets: ["latin"] });
 import { CartProvider } from "../components/CartContext";
 import { FavoriteProvider } from "@/components/FavoriteContext";
+import AiChat from "@/components/ai/AiChat";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { UserProvider } from "@/components/UserContext";
+const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
-  title: "Next Storefront",
+  title: "Furniture Store",
   description: "A nifty store built with Next.js",
 };
 
@@ -17,16 +22,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("layout");
   return (
+    // <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <FavoriteProvider>
-            <CartProvider>
-              <Navbar />
-              <Container className="py-20">{children}</Container>
-            </CartProvider>
-          </FavoriteProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

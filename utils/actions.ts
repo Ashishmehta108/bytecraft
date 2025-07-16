@@ -33,3 +33,49 @@ export const fetchSingleProduct = async (productId: string) => {
   }
   return product;
 };
+
+export const createReview = async ({
+  productId,
+  rating,
+  comment,
+  userId,
+}: {
+  productId: string;
+  rating: number;
+  userId: string;
+  comment: string;
+}) => {
+  try {
+    const reviewId = await crypto.randomUUID();
+    const newReview = await db.review.create({
+      data: {
+        reviewId: reviewId,
+        productId: productId,
+        content: comment,
+        stars: rating,
+        userId: userId,
+      },
+    });
+    return newReview;
+  } catch (error: any) {
+    console.error("Error creating review:", error.message);
+    throw new Error("Failed to create review");
+  }
+};
+
+export const fetchReviews = async (productId: string) => {
+  try {
+    const reviews = await db.review.findMany({
+      where: {
+        productId: productId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return reviews;
+  } catch (error: any) {
+    console.error("Error fetching reviews:", error.message);
+    throw new Error("Failed to fetch reviews");
+  }
+};
