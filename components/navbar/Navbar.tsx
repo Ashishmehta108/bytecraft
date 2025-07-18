@@ -1,4 +1,5 @@
 "use client";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { CartItem, useCart } from "../CartContext";
 import Container from "../global/Container";
 import { ModeToggle } from "../Modetoggle";
@@ -8,6 +9,8 @@ import Logo from "./Logo";
 import NavSearch from "./NavSearch";
 import { Suspense } from "react";
 function Navbar() {
+  const user = useUser();
+  const isloggedIn = user.isSignedIn;
   const { cart } = useCart();
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   return (
@@ -18,6 +21,11 @@ function Navbar() {
           <NavSearch />
         </Suspense>
         <div className="flex gap-4 items-center">
+          {isloggedIn && (
+            <div className="hidden md:flex">
+              <UserButton />
+            </div>
+          )}
           <ModeToggle />
           <CartButton items={totalItems} />
           <LinksDropdown />

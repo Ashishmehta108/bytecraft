@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "../CartContext";
-import { useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { Components } from "react-markdown";
 import { toast } from "sonner";
 import { AnimatedAirasearch } from "../AnimatedAirasearch";
@@ -74,6 +74,9 @@ export default function AiChat() {
   const [isTyping, setIsTyping] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const u = useUser();
+  const isLogged = u.isSignedIn;
+
   const { addToCart, setUpdate } = useCart();
   useEffect(() => {
     if (!userId) return;
@@ -195,7 +198,6 @@ export default function AiChat() {
       sendMessage();
     }
   };
-
   const MarkdownComponents: Components = {
     img: ({ src = "", alt = "" }) => {
       if (!src) return null;
@@ -302,18 +304,27 @@ export default function AiChat() {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 space-y-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
                   {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-zinc-500 dark:text-zinc-400">
-                      <div className="flex items-center justify-center w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full mb-4">
-                        <MessageCircle className="h-8 w-8" />
+                    !isLogged ? (
+                      <div className="flex flex-col items-center justify-center h-full text-zinc-500 dark:text-zinc-400">
+                        Sign in to start a conversation
+                        <div className="flex items-center justify-center px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg mb-4 cursor-pointer">
+                          <SignInButton>Sign in</SignInButton>
+                        </div>
                       </div>
-                      <h3 className="text-lg font-medium mb-2">
-                        Start a conversation
-                      </h3>
-                      <p className="text-sm text-center max-w-xs">
-                        Ask me anything about products, get recommendations, or
-                        just chat!
-                      </p>
-                    </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-zinc-500 dark:text-zinc-400">
+                        <div className="flex items-center justify-center w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full mb-4">
+                          <MessageCircle className="h-8 w-8" />
+                        </div>
+                        <h3 className="text-lg font-medium mb-2">
+                          Start a conversation
+                        </h3>
+                        <p className="text-sm text-center max-w-xs">
+                          Ask me anything about products, get recommendations,
+                          or just chat!
+                        </p>
+                      </div>
+                    )
                   ) : (
                     messages.map((msg) => (
                       <div

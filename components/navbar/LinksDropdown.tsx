@@ -12,9 +12,6 @@ import menu from "../../app/menu.svg";
 import Image from "next/image";
 import { UserButton, useUser } from "@clerk/nextjs";
 function LinksDropdown() {
-  const user = useUser();
-  const isloggedIn = user.isSignedIn;
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,12 +34,6 @@ function LinksDropdown() {
             </DropdownMenuItem>
           );
         })}
-        {isloggedIn && (
-          <DropdownMenuItem>
-            <UserButton />
-            {user.user.fullName}
-          </DropdownMenuItem>
-        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
