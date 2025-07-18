@@ -46,16 +46,20 @@ export const createReview = async ({
   comment: string;
 }) => {
   try {
-    const reviewId = await crypto.randomUUID();
+    if (!userId) throw new Error("User ID is required");
+    const user = await db.user.findUnique({
+      where: { clerkId: userId },
+    });
+
     const newReview = await db.review.create({
       data: {
-        reviewId: reviewId,
-        productId: productId,
+        productId,
         content: comment,
         stars: rating,
-        userId: userId,
+        userId: user?.id!,
       },
     });
+
     return newReview;
   } catch (error: any) {
     console.error("Error creating review:", error.message);

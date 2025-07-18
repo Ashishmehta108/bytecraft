@@ -110,17 +110,17 @@ function AddToCart({ product }: AddToCartProps) {
   if (isInCart) {
     return (
       <div className="flex items-center gap-4 mt-8">
-        <div className="flex items-center bg-white dark:bg-gray-900 rounded-none border-2 border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center gap-2 bg-transparent rounded-none transition-shadow duration-200">
           <Button
             onClick={handleDecrement}
             variant="ghost"
             size="sm"
-            className="h-12 w-12 p-0 rounded-l-xl hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200"
+            className="h-12 w-12 p-0 rounded-xl hover:bg-zinc-50 dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-900/20 hover:text-zinc-600 dark:hover:text-zinc-200 transition-all duration-200"
           >
             <Minus className="h-4 w-4" />
           </Button>
 
-          <div className="flex items-center justify-center min-w-[4rem] h-12 px-4 bg-gray-50 dark:bg-gray-800 border-x-2 border-gray-200 dark:border-neutral-800 font-semibold text-lg">
+          <div className="flex items-center rounded-xl justify-center min-w-[4rem] h-12 px-4 bg-zinc-50 dark:bg-zinc-900 border-x-2   font-semibold text-lg">
             {quantity}
           </div>
 
@@ -128,7 +128,7 @@ function AddToCart({ product }: AddToCartProps) {
             onClick={handleIncrement}
             variant="ghost"
             size="sm"
-            className="h-12 w-12 p-0 rounded-r-xl hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200"
+            className="h-12 w-12 p-0 rounded-xl hover:bg-zinc-50 dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-900/20 hover:text-zinc-600 dark:hover:text-zinc-200 transition-all duration-200"
           >
             <Plus className="h-4 w-4" />
           </Button>

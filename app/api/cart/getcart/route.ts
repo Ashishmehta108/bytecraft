@@ -3,6 +3,7 @@ import prisma from "@/utils/db";
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await req.json();
+    console.log("userid is", userId);
     const getUser = await prisma.user.findUnique({
       where: { clerkId: userId },
     });

@@ -54,18 +54,29 @@ const UserCartContext = createContext<UserCartContextSchema>({
   setUpdate: () => {},
 });
 
+// Optional: helper function to get Clerk userId safely
+const getClerkUserId = (user: any, isLoaded: boolean): string | null => {
+  return isLoaded && user?.id ? user.id : null;
+};
+
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [update, setUpdate] = useState(false);
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const prevCartRef = useRef<CartItem[]>([]);
   const hasMounted = useRef(false);
 
+  const userId = getClerkUserId(user, isLoaded);
+
   const addToCart = async (product: CartItem) => {
+    if (!userId) {
+      toast.error("User not loaded. Please wait.");
+      return;
+    }
+
     try {
-      const item = { productId: product.id };
       setLoading(true);
 
       const res = await fetch("/api/cart", {
@@ -73,7 +84,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ productId: product.id, userId: user?.id }),
+        body: JSON.stringify({
+          productId: product.id,
+          userId,
+          quantity: product.quantity,
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to add item to cart");
@@ -90,6 +105,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const changeItemQuantity = async (item: UpdateCartItem) => {
+    if (!userId) return;
+
     try {
       await fetch("/api/cart", {
         method: "PUT",
@@ -99,7 +116,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         body: JSON.stringify({
           productId: item.id,
           quantity: item.quantity,
-          userId: user?.id,
+          userId,
         }),
       });
     } catch (error) {
@@ -110,14 +127,18 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const clearCartItem = async (productId: string) => {
+    if (!userId) return;
+
     const res = await fetch("/api/cart", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ productId, userId: user?.id }),
+      body: JSON.stringify({ productId, userId }),
     });
+
     console.log(await res.json());
+
     toast(
       <span>
         <CheckCircle2 className="fill-green-500 text-white" /> Cart cleared
@@ -126,7 +147,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (!update) return;
+    if (!userId) return;
 
     const fetchUpdatedCart = async () => {
       try {
@@ -136,9 +157,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: user?.id }),
+          body: JSON.stringify({ userId }),
         });
+
         if (!res.ok) throw new Error("Failed to fetch cart");
+
         const data = await res.json();
         setCart(data.cart || []);
         setError(null);
@@ -152,7 +175,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     fetchUpdatedCart();
-  }, [update]);
+  }, [update, userId]);
 
   useEffect(() => {
     if (!hasMounted.current) {
@@ -160,6 +183,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       prevCartRef.current = cart;
       return;
     }
+
     const prevCart = prevCartRef.current;
     const changedItems: UpdateCartItem[] = cart.reduce(
       (acc: UpdateCartItem[], currentItem) => {

@@ -4,7 +4,7 @@ import { createReview } from "@/utils/actions";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { comment, rating, productId } = body;
+    const { comment, rating, productId, userId } = body;
 
     if (!comment || !rating || !productId) {
       return NextResponse.json(
@@ -12,8 +12,8 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-//@ts-ignore
-    const review = await createReview({ comment, rating, productId });
+
+    const review = await createReview({ comment, rating, productId, userId });
 
     return NextResponse.json(review, { status: 201 });
   } catch (error: any) {

@@ -15,6 +15,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useReviews } from "./Reviewcontext";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 export default function CreateReview() {
   const { id, refreshReviews } = useReviews();
@@ -22,7 +23,7 @@ export default function CreateReview() {
   const [comment, setComment] = useState("");
   const [hover, setHover] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const user = useUser();
   const handleSubmit = async () => {
     if (!rating || !comment.trim()) {
       alert("Please complete all fields");
@@ -38,6 +39,7 @@ export default function CreateReview() {
           comment,
           rating,
           productId: id,
+          userId: user.user?.id,
         }),
       });
 
