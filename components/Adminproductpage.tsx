@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import {
   AddEditProductDrawer,
-  mockProducts,
   ProductEmptyState,
   ProductError,
   ProductFilters,
@@ -11,37 +10,61 @@ import {
 } from "./Productcomps";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, UserRound } from "lucide-react";
+import { CheckCircle2, Package, Plus, UserRound, XCircle } from "lucide-react";
 import { Product } from "./Productcomps";
 import { AdminPageSkeleton } from "./Adminpageskeleton";
 interface ProductHeaderProps {
   total: number;
   onAdd: () => void;
 }
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Logo from "./navbar/Logo";
+
+function LogoutButton() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = "admin_token=; Max-Age=0; path=/";
+    router.push("/admin-login");
+  };
+
+  return (
+    <Button
+      onClick={handleLogout}
+      variant={"destructive"}
+      className="cursor-pointer"
+      size={"sm"}
+    >
+      Logout
+    </Button>
+  );
+}
 
 const ProductHeader: React.FC<ProductHeaderProps> = ({ total, onAdd }) => {
   return (
-    <div className="bg-white dark:bg-neutral-950 shadow-none border-b">
+    <div className="bg-white dark:bg-zinc-950 border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
-            <Package className="h-8 w-8 " />
-            <h1 className="text-2xl font-bold text-gray-900">
+            <Logo />
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
               Bytecraft Admin
             </h1>
           </div>
           <div className="flex items-center space-x-4">
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="secondary" className="text-sm dark:text-white">
               {total} products
             </Badge>
             <Button
               size="sm"
-              className="bg-indigo-600 hover:bg-indigo-500"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white"
               onClick={onAdd}
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Product
             </Button>
+            <LogoutButton />
           </div>
         </div>
       </div>
@@ -51,8 +74,7 @@ const ProductHeader: React.FC<ProductHeaderProps> = ({ total, onAdd }) => {
 
 const AdminProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(mockProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -110,7 +132,9 @@ const AdminProductsPage: React.FC = () => {
     setCurrentPage(1);
   }, [products, searchTerm, filterType]);
 
-  const handleAdd = () => setIsAddDrawerOpen(true);
+  const handleAdd = async () => {
+    setIsAddDrawerOpen(true);
+  };
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
     setIsEditDrawerOpen(true);
@@ -118,7 +142,7 @@ const AdminProductsPage: React.FC = () => {
   const handleSave = async (product: Product, mode: "add" | "edit") => {
     if (mode === "add") {
       setProducts((prev) => [...prev, product]);
-      const res = await fetch("/api/prods/addprod", {
+      const res = await fetch("/api/prods", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,19 +153,39 @@ const AdminProductsPage: React.FC = () => {
       setProducts((prev) =>
         prev.map((p) => (p.id === product.id ? product : p))
       );
-      const res = await fetch("/api/prods/editprod", {
+      const res = await fetch("/api/prods", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(product),
       });
+      const data = await res.json();
+      if (!data) {
+        toast.error("Failed to update product");
+        toast(
+          <span className="flex items-center gap-2">
+            <XCircle className="fill-red-500 text-white" />
+            {product.name} couldn't be added , try again
+          </span>
+        );
+      }
+      toast(
+        <span className="flex items-center gap-2">
+          <CheckCircle2 className="fill-green-500 text-white" />
+          Product added successfully
+        </span>
+      );
     }
   };
   const handleDelete = async (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
-    const res = await fetch(`/api/prods/${id}`, {
+    const res = await fetch(`/api/prods`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
     });
   };
 

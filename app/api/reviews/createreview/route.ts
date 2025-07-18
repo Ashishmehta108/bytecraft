@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
+//@ts-ignore
     const review = await createReview({ comment, rating, productId });
 
     return NextResponse.json(review, { status: 201 });

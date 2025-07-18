@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { fetchReviews } from "@/utils/actions";
-
-export async function GET(
-  request: Request,
-  { params }: { params: { productid: string } }
-) {
+type tParams = Promise<{ productid: string }>;
+export async function GET(request: Request, { params }: { params: tParams }) {
   const { productid } = await params;
   console.log(productid);
 

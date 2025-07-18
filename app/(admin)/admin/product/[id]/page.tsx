@@ -49,7 +49,7 @@ function SingleProductPage() {
     );
   }
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col bg-background ">
       <section>
         <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
           <div className="relative h-96 md:h-[500px]">

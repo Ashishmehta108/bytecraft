@@ -21,25 +21,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <ClerkProvider>
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <Providers>
-          <ClerkProvider>
-            <UserProvider>
-              <FavoriteProvider>
-                <CartProvider>
-                  <Navbar />
-                  <Container className="py-20">
-                    {children}
-                    <AiChat />
-                  </Container>
-                </CartProvider>
-              </FavoriteProvider>
-            </UserProvider>
-          </ClerkProvider>
-        </Providers>
-      </body>
-    </html>
+    <>
+      <Providers>
+        <ClerkProvider>
+          <UserProvider>
+            <FavoriteProvider>
+              <CartProvider>
+                <Navbar />
+                <Container className="py-20">
+                  {children}
+                  <AiChat />
+                </Container>
+              </CartProvider>
+            </FavoriteProvider>
+          </UserProvider>
+        </ClerkProvider>
+      </Providers>
+    </>
   );
 }

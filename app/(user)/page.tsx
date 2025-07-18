@@ -1,5 +1,5 @@
 import FeaturedProducts from '@/components/home/FeaturedProducts';
-import Hero from '@/components/home/Hero';
+import {Hero,Footer} from '@/components/home/Hero';
 import LoadingContainer from '@/components/global/LoadingContainer';
 import { Suspense } from 'react';
 function HomPage() {
@@ -9,6 +9,7 @@ function HomPage() {
       <Suspense fallback={<LoadingContainer />}>
         <FeaturedProducts />
       </Suspense>
+      <Footer/>
     </>
   );
 }

@@ -90,7 +90,7 @@ function AddToCart({ product }: AddToCartProps) {
       handleQuantityChange(newQuantity);
       toast(
         <span className="flex items-center gap-2">
-          <XCircle className="fill-red-500 text-white" />
+          <CheckCircle2 className="fill-red-500 text-white" />
           Quantity updated to {newQuantity}
         </span>
       );
@@ -100,7 +100,7 @@ function AddToCart({ product }: AddToCartProps) {
       clearCartItem(product.id);
       toast(
         <span className="flex items-center gap-2">
-          <XCircle className="fill-red-500 text-white" />
+          <CheckCircle2 className="fill-red-500 text-white" />
           {product.name} removed from cart
         </span>
       );
@@ -120,7 +120,7 @@ function AddToCart({ product }: AddToCartProps) {
             <Minus className="h-4 w-4" />
           </Button>
 
-          <div className="flex items-center justify-center min-w-[4rem] h-12 px-4 bg-gray-50 dark:bg-gray-800 border-x-2 border-gray-200 dark:border-gray-700 font-semibold text-lg">
+          <div className="flex items-center justify-center min-w-[4rem] h-12 px-4 bg-gray-50 dark:bg-gray-800 border-x-2 border-gray-200 dark:border-neutral-800 font-semibold text-lg">
             {quantity}
           </div>
 

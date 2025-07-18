@@ -15,11 +15,16 @@ const isPrivateRoute = createRouteMatcher([
   "/products/:slug",
   "wishlist",
 ]);
-const isPublicApi = createRouteMatcher(["/api/products"]);
 export default clerkMiddleware(async (auth, req) => {
   const isBot = req.headers.get("user-agent")?.includes("bot");
   console.log(req.nextUrl.pathname);
   console.log(isPrivateRoute(req), isPrivateRoute);
+  const token = req.cookies.get("admin_token")?.value;
+
+  if (!token && req.nextUrl.pathname.startsWith("/admin")) {
+    return NextResponse.rewrite(new URL("/admin-login", req.url));
+  }
+
   if (isPrivateRoute(req) && !req.nextUrl.pathname.startsWith("/api")) {
     console.log("Middleware triggered:", req.nextUrl.pathname);
     await auth.protect();
@@ -34,6 +39,7 @@ export default clerkMiddleware(async (auth, req) => {
       { status: 401 }
     );
   }
+  return NextResponse.next();
 });
 
 export const config = {
@@ -42,5 +48,8 @@ export const config = {
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for API routes
     "/(api|trpc)(.*)",
+    "/admin/:path",
+
+    "/admin",
   ],
 };

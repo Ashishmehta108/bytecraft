@@ -1,6 +1,7 @@
 "use client";
 
 import { debouncePerItem } from "@/utils/debounce";
+import { useUser } from "@clerk/nextjs";
 import { CheckCircle2 } from "lucide-react";
 import {
   createContext,
@@ -58,7 +59,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [update, setUpdate] = useState(false);
-
+  const { user } = useUser();
   const prevCartRef = useRef<CartItem[]>([]);
   const hasMounted = useRef(false);
 
@@ -72,7 +73,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(item),
+        body: JSON.stringify({ productId: product.id, userId: user?.id }),
       });
 
       if (!res.ok) throw new Error("Failed to add item to cart");
@@ -95,7 +96,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ productId: item.id, quantity: item.quantity }),
+        body: JSON.stringify({
+          productId: item.id,
+          quantity: item.quantity,
+          userId: user?.id,
+        }),
       });
     } catch (error) {
       toast.error(
@@ -110,7 +115,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ productId }),
+      body: JSON.stringify({ productId, userId: user?.id }),
     });
     console.log(await res.json());
     toast(
@@ -121,24 +126,33 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    const fetchCart = async () => {
+    if (!update) return;
+
+    const fetchUpdatedCart = async () => {
       try {
         setLoading(true);
-        const res = await fetch("/api/cart");
+        const res = await fetch("/api/cart/getcart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: user?.id }),
+        });
         if (!res.ok) throw new Error("Failed to fetch cart");
         const data = await res.json();
         setCart(data.cart || []);
         setError(null);
       } catch (err) {
         console.error(err);
-        setError("Unable to load cart.");
+        setError("Unable to update cart.");
       } finally {
         setLoading(false);
+        setUpdate(false); // reset the flag
       }
     };
 
-    fetchCart();
-  }, []);
+    fetchUpdatedCart();
+  }, [update]);
 
   useEffect(() => {
     if (!hasMounted.current) {

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,9 +10,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Filter, Grid, List, Search } from "lucide-react";
+import { Filter, Grid, List, Search, Package, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Package, Plus } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Pencil,
+  Trash2,
+  Star,
+  StarOff,
+  Tag,
+  Building,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+
 export type Product = {
   id: string;
   name: string;
@@ -22,8 +59,8 @@ export type Product = {
   description: string;
   company: string;
   featured: boolean;
-  clerkId: string;
 };
+
 interface ProductFiltersProps {
   searchTerm: string;
   setSearchTerm: (val: string) => void;
@@ -33,6 +70,7 @@ interface ProductFiltersProps {
   setViewMode: (val: "grid" | "list") => void;
   uniqueTypes: string[];
 }
+
 interface ProductHeaderProps {
   total: number;
   onAdd: () => void;
@@ -45,6 +83,7 @@ interface ProductGridProps {
   onDelete: (id: string) => void;
   onToggleFeatured: (id: string) => void;
 }
+
 interface ProductCardProps {
   product: Product;
   onEdit: (product: Product) => void;
@@ -72,157 +111,37 @@ interface ProductPaginationProps {
   totalPages: number;
   setCurrentPage: (page: number) => void;
 }
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import {
-  Pencil,
-  Trash2,
-  Star,
-  StarOff,
-  Tag,
-  Building,
-  AlertCircle,
-} from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
-
-export const mockProducts: Product[] = [
-  {
-    id: "1",
-    name: "Avant-garde Lamp",
-    type: "lamp",
-    areaOfUse: "lighting",
-    price: 299.99,
-    image:
-      "https://images.pexels.com/photos/943150/pexels-photo-943150.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Modern sculptural lamp with adjustable brightness",
-    company: "Modenza",
-    featured: true,
-    clerkId: "user_123",
-  },
-  {
-    id: "2",
-    name: "Ergonomic Office Chair",
-    type: "chair",
-    areaOfUse: "seating",
-    price: 549.99,
-    image:
-      "https://images.pexels.com/photos/586806/pexels-photo-586806.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Premium ergonomic chair with lumbar support",
-    company: "ComfortCorp",
-    featured: false,
-    clerkId: "user_456",
-  },
-  {
-    id: "3",
-    name: "Minimalist Coffee Table",
-    type: "table",
-    areaOfUse: "furniture",
-    price: 199.99,
-    image:
-      "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Clean lines and sustainable materials",
-    company: "Nordic Design",
-    featured: true,
-    clerkId: "user_789",
-  },
-  {
-    id: "4",
-    name: "Decorative Vase Set",
-    type: "decor",
-    areaOfUse: "decoration",
-    price: 89.99,
-    image:
-      "https://images.pexels.com/photos/1129019/pexels-photo-1129019.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Handcrafted ceramic vase collection",
-    company: "Artisan Craft",
-    featured: false,
-    clerkId: "user_101",
-  },
-  {
-    id: "5",
-    name: "Smart Bookshelf",
-    type: "storage",
-    areaOfUse: "storage",
-    price: 399.99,
-    image:
-      "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Modern bookshelf with integrated LED lighting",
-    company: "TechFurniture",
-    featured: true,
-    clerkId: "user_202",
-  },
-  {
-    id: "6",
-    name: "Velvet Accent Chair",
-    type: "chair",
-    areaOfUse: "seating",
-    price: 329.99,
-    image:
-      "https://images.pexels.com/photos/586806/pexels-photo-586806.jpeg?auto=compress&cs=tinysrgb&w=400",
-    description: "Luxurious velvet upholstery with gold accents",
-    company: "Luxury Living",
-    featured: false,
-    clerkId: "user_303",
-  },
-];
 
 export const ProductError: React.FC<ProductErrorProps> = ({
   error,
   setError,
 }) => {
-  return (
-    <div>
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center">
-          <AlertCircle className="h-5 w-5 text-red-600 mr-3" />
-          <span className="text-red-800">{error}</span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setError("")}
-            className="ml-auto"
-          >
-            Dismiss
-          </Button>
-        </div>
-      )}
+  return error ? (
+    <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4 mb-6 flex items-center">
+      <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-300 mr-3" />
+      <span className="text-red-800 dark:text-red-200">{error}</span>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setError(null)}
+        className="ml-auto"
+      >
+        Dismiss
+      </Button>
     </div>
-  );
+  ) : null;
 };
 
 export const ProductEmptyState: React.FC = () => {
   return (
     <div className="text-center py-12">
-      <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-      <h3 className="text-lg font-medium text-gray-900 mb-2">
+      <Package className="h-16 w-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
         No products found
       </h3>
-      <p className="text-gray-600">Try adjusting your search or filters</p>
+      <p className="text-gray-600 dark:text-gray-400">
+        Try adjusting your search or filters
+      </p>
     </div>
   );
 };
@@ -244,7 +163,6 @@ export const ProductPagination: React.FC<ProductPaginationProps> = ({
         >
           Previous
         </Button>
-
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <Button
             key={page}
@@ -255,7 +173,6 @@ export const ProductPagination: React.FC<ProductPaginationProps> = ({
             {page}
           </Button>
         ))}
-
         <Button
           variant="outline"
           onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
@@ -265,6 +182,164 @@ export const ProductPagination: React.FC<ProductPaginationProps> = ({
         </Button>
       </div>
     </div>
+  );
+};
+
+
+
+export const ProductFilters: React.FC<ProductFiltersProps> = ({
+  searchTerm,
+  setSearchTerm,
+  filterType,
+  setFilterType,
+  viewMode,
+  setViewMode,
+  uniqueTypes,
+}) => {
+  return (
+    <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border dark:border-zinc-800 p-6 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-4 flex-1">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-300" />
+            <Input
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 dark:placeholder:text-gray-500"
+            />
+          </div>
+
+          <Select value={filterType} onValueChange={setFilterType}>
+            <SelectTrigger className="w-full md:w-48">
+              <Filter className="h-4 w-4 mr-2" />
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              {uniqueTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Button
+            variant={viewMode === "grid" ? "default" : "outline"}
+            onClick={() => setViewMode("grid")}
+          >
+            <Grid className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "outline"}
+            onClick={() => setViewMode("list")}
+          >
+            <List className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface ProductCardProps {
+  product: Product;
+  onEdit: (product: Product) => void;
+  onDelete: (id: string) => void;
+  onToggleFeatured: (id: string) => void;
+  isLoading?: boolean;
+}
+
+export const ProductCard = ({
+  product,
+  onEdit,
+  onDelete,
+  onToggleFeatured,
+  isLoading = false,
+}: ProductCardProps) => {
+  return (
+    <Card className="group hover:shadow-lg transition-all duration-300 border border-border bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100">
+      <CardHeader className="p-0">
+        <div className="relative overflow-hidden rounded-t-lg">
+          <Link href={`/admin/product/${product.id}`}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-300"
+            />
+          </Link>
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-4 space-y-3">
+        <div>
+          <h3 className="font-semibold text-lg line-clamp-1 capitalize">
+            {product.name}
+          </h3>
+          <p className="text-sm text-muted-foreground">{product.company}</p>
+        </div>
+
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Tag className="h-4 w-4" />
+            <span>{product.type}</span>
+          </div>
+          <div className="font-medium text-black dark:text-white">
+            ₹{product.price}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Building className="h-4 w-4" />
+          <span>{product.areaOfUse}</span>
+        </div>
+
+        <p className="text-sm line-clamp-2 text-muted-foreground">
+          {product.description}
+        </p>
+      </CardContent>
+
+      <CardFooter className="p-4 pt-0">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onEdit(product)}
+            disabled={isLoading}
+          >
+            <Pencil className="w-4 h-4 mr-1" />
+            Edit
+          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm" disabled={isLoading}>
+                <Trash2 className="w-4 h-4 mr-1" />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Product</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete “{product.name}”? This action
+                  cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => onDelete(product.id)}>
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </CardFooter>
+    </Card>
   );
 };
 
@@ -290,7 +365,6 @@ export const AddEditProductDrawer: React.FC<AddEditProductDrawerProps> = ({
         image: "",
         description: "",
         featured: false,
-        clerkId: "user_current",
       });
     } else if (product) {
       setEditProduct({ ...product });
@@ -466,214 +540,142 @@ export const AddEditProductDrawer: React.FC<AddEditProductDrawerProps> = ({
   );
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  onEdit,
-  onDelete,
-  onToggleFeatured,
-  isLoading = false,
-}) => {
-  return (
-    <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-none cursor-pointer bg-white/80 backdrop-blur-sm">
-      <CardHeader className="p-0">
-        <div className="relative overflow-hidden rounded-t-lg">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      </CardHeader>
+// export const ProductCard: React.FC<ProductCardProps> = ({
+//   product,
+//   onEdit,
+//   onDelete,
+//   onToggleFeatured,
+//   isLoading = false,
+// }) => {
+//   return (
+//     <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-none cursor-pointer bg-white/80 dark:bg-neutral-950/80 backdrop-blur-sm">
+//       <CardHeader className="p-0">
+//         <div className="relative overflow-hidden rounded-t-lg">
+//           <Link key={product.id} href={`/admin/product/${product.id}`}>
+//             <img
+//               src={product.image}
+//               alt={product.name}
+//               className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-300"
+//             />
+//           </Link>
+//         </div>
+//       </CardHeader>
 
-      <CardContent className="p-4">
-        <div className="space-y-3">
-          <div>
-            <h3 className="font-bold text-lg text-gray-900 capitalize line-clamp-1">
-              {product.name}
-            </h3>
-            <p className="text-sm text-gray-600">{product.company}</p>
-          </div>
+//       <CardContent className="p-4">
+//         <div className="space-y-3">
+//           <div>
+//             <h3 className="font-bold text-lg text-gray-900 capitalize line-clamp-1">
+//               {product.name}
+//             </h3>
+//             <p className="text-sm text-gray-600">{product.company}</p>
+//           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Tag className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600 capitalize">
-                {product.type}
-              </span>
-            </div>
-            <div className="text-md font-normal text-neutral-800">
-              ₹{product.price}
-            </div>
-          </div>
+//           <div className="flex items-center justify-between">
+//             <div className="flex items-center space-x-2">
+//               <Tag className="h-4 w-4 text-gray-500" />
+//               <span className="text-sm text-gray-600 capitalize">
+//                 {product.type}
+//               </span>
+//             </div>
+//             <div className="text-md font-normal text-neutral-800">
+//               ₹{product.price}
+//             </div>
+//           </div>
 
-          <div className="flex items-center space-x-2">
-            <Building className="h-4 w-4 text-gray-500" />
-            <span className="text-sm text-gray-600 capitalize">
-              {product.areaOfUse}
-            </span>
-          </div>
+//           <div className="flex items-center space-x-2">
+//             <Building className="h-4 w-4 text-gray-500" />
+//             <span className="text-sm text-gray-600 capitalize">
+//               {product.areaOfUse}
+//             </span>
+//           </div>
 
-          <p className="text-sm text-gray-700 line-clamp-2">
-            {product.description}
-          </p>
-        </div>
-      </CardContent>
+//           <p className="text-sm text-gray-700 line-clamp-2">
+//             {product.description}
+//           </p>
+//         </div>
+//       </CardContent>
 
-      <CardFooter className="p-4 pt-0">
-        <div className="flex flex-wrap gap-2 w-full">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onEdit(product)}
-            disabled={isLoading}
-            className="flex items-center space-x-1 cursor-pointer"
-          >
-            <Pencil className="h-3 w-3" />
-            <span>Edit</span>
-          </Button>
+//       <CardFooter className="p-4 pt-0">
+//         <div className="flex flex-wrap gap-2 w-full">
+//           <Button
+//             variant="outline"
+//             size="sm"
+//             onClick={() => onEdit(product)}
+//             disabled={isLoading}
+//             className="flex items-center space-x-1 cursor-pointer"
+//           >
+//             <Pencil className="h-3 w-3" />
+//             <span>Edit</span>
+//           </Button>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={isLoading}
-                className="flex items-center space-x-1 bg-red-50 hover:text-red-600 cursor-pointer hover:bg-red-100 text-red-700"
-              >
-                <Trash2 className="h-3 w-3" />
-                <span>Delete</span>
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Product</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete "{product.name}"? This action
-                  cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => onDelete(product.id)}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </CardFooter>
-    </Card>
-  );
-};
+//           <AlertDialog>
+//             <AlertDialogTrigger asChild>
+//               <Button
+//                 variant="outline"
+//                 size="sm"
+//                 disabled={isLoading}
+//                 className="flex items-center space-x-1 bg-red-50 hover:text-red-600 cursor-pointer hover:bg-red-100 text-red-700"
+//               >
+//                 <Trash2 className="h-3 w-3" />
+//                 <span>Delete</span>
+//               </Button>
+//             </AlertDialogTrigger>
+//             <AlertDialogContent>
+//               <AlertDialogHeader>
+//                 <AlertDialogTitle>Delete Product</AlertDialogTitle>
+//                 <AlertDialogDescription>
+//                   Are you sure you want to delete "{product.name}"? This action
+//                   cannot be undone.
+//                 </AlertDialogDescription>
+//               </AlertDialogHeader>
+//               <AlertDialogFooter>
+//                 <AlertDialogCancel>Cancel</AlertDialogCancel>
+//                 <AlertDialogAction
+//                   onClick={() => onDelete(product.id)}
+//                   className="bg-red-600 hover:bg-red-700"
+//                 >
+//                   Delete
+//                 </AlertDialogAction>
+//               </AlertDialogFooter>
+//             </AlertDialogContent>
+//           </AlertDialog>
+//         </div>
+//       </CardFooter>
+//     </Card>
+//   );
+// };
 
-export const ProductHeader: React.FC<ProductHeaderProps> = ({
-  total,
-  onAdd,
-}) => {
-  return (
-    <div className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-3">
-            <Package className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">Products Admin</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Badge variant="secondary" className="text-sm">
-              {total} products
-            </Badge>
-            <Button
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700"
-              onClick={onAdd}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Product
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+interface ProductGridProps {
+  products: Product[];
+  viewMode: "grid" | "list";
+  onEdit: (product: Product) => void;
+  onDelete: (id: string) => void;
+  onToggleFeatured: (id: string) => void;
+}
 
-export const ProductFilters: React.FC<ProductFiltersProps> = ({
-  searchTerm,
-  setSearchTerm,
-  filterType,
-  setFilterType,
-  viewMode,
-  setViewMode,
-  uniqueTypes,
-}) => {
-  return (
-    <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="flex flex-col md:flex-row gap-4 flex-1">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full md:w-48">
-              <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              {uniqueTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Button>
-            <Grid className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const ProductGrid: React.FC<ProductGridProps> = ({
+export const ProductGrid = ({
   products,
   viewMode,
   onEdit,
   onDelete,
   onToggleFeatured,
-}) => {
+}: ProductGridProps) => {
   return (
     <div
       className={`grid gap-6 ${
         viewMode === "grid"
-          ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
           : "grid-cols-1"
       }`}
     >
-      {products.map((product,index) => (
-        <Link key={index} href={`/admin/product/${product.id}`}>
-          <ProductCard
-            key={product.id}
-            product={product}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onToggleFeatured={onToggleFeatured}
-          />
-        </Link>
+      {products.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onToggleFeatured={onToggleFeatured}
+        />
       ))}
     </div>
   );
