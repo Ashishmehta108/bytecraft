@@ -103,14 +103,14 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
 
   return (
     <div className="flex md:flex-row flex-col items-center justify-center   md:items-center md:justify-evenly h-[500px] bg-background p-4">
-      <div className="text-3xl font-semibold text-foreground max-w-md ">
+      <div className="md:text-3xl text-xl font-normal text-foreground max-w-md ">
         Login using password , yoursecretpassword
       </div>
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-white rounded-2xl p-8 w-full max-w-sm"
+        className="bg-white rounded-2xl dark:bg-zinc-900 p-8 w-full max-w-sm"
       >
         <AnimatePresence mode="wait">
           {/* Initial State - Ask if admin */}
@@ -129,7 +129,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <svg
-                  className="w-8 h-8 text-zinc-600"
+                  className="w-7 h-7 text-zinc-600 dark:text-zinc-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

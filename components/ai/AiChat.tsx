@@ -63,8 +63,8 @@ export function convertImageUrlsToMarkdown(text: string): string {
   });
 }
 
-// const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
-const BACKEND_BASE="http://localhost:5500"
+const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
+// const BACKEND_BASE="http://localhost:5500"
 export default function AiChat() {
   const { user } = useUser();
   const userId = user?.id;
