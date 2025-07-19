@@ -3,10 +3,10 @@ import prisma from "@/utils/db";
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await req.json();
-    console.log("userid is", userId);
     const getUser = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
+    
     const cart = await prisma.cart.findFirst({
       where: {
         id: getUser?.id,
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-    console.log(await prisma.cart.findFirst({ where: { userId } }));
+    console.log(cart);
     const formattedItems =
       cart?.items.map((item) => ({
         id: item.product.id,

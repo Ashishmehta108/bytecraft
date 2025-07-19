@@ -63,8 +63,8 @@ export function convertImageUrlsToMarkdown(text: string): string {
   });
 }
 
-const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
-
+// const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_BASE="http://localhost:5500"
 export default function AiChat() {
   const { user } = useUser();
   const userId = user?.id;
@@ -454,7 +454,7 @@ export default function AiChat() {
           <Button
             onClick={() => setExpanded(true)}
             variant={"outline"}
-            className="fixed bottom-8 right-8  text-foreground rounded-full w-14 h-14 shadow-xl border-0 transition-all duration-200 hover:scale-105 "
+            className="fixed bottom-8 right-8  text-foreground rounded-full w-14 h-14 shadow-xl border-0 transition-all duration-200 hover:scale-105 z-50 "
           >
             <Sparkles className="h-6 w-6" />
           </Button>
