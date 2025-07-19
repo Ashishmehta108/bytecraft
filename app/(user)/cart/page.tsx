@@ -28,7 +28,7 @@ interface CartItem {
 
 const CartPage = () => {
   const { cart, setCart, loading, clearCartItem } = useCart();
-
+console.log(cart)
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setCart((prev) =>
       prev.map((item) => {

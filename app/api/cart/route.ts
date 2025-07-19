@@ -4,6 +4,7 @@ import prisma from "@/utils/db";
 export async function POST(req: NextRequest) {
   try {
     const { userId, productId, quantity } = await req.json();
+    console.log(userId, productId, quantity);
     if (userId.trim() === "")
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -126,8 +127,10 @@ export async function DELETE(req: NextRequest) {
     const getUser = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
+
     const resp = await prisma.cartItem.delete({
       where: {
+        id: getUser?.id,
         productId: productId.productId,
       },
     });

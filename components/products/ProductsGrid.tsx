@@ -5,11 +5,12 @@ import { Product } from "@prisma/client";
 import { formatCurrency } from "@/utils/format";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Heart, Check } from "lucide-react";
+import { ShoppingCart, Heart, Check, CheckCircle2 } from "lucide-react";
 import { useCart } from "../CartContext";
 import { useFavorite } from "../FavoriteContext";
 import { CartItem } from "../CartContext";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 interface ProductsGridProps {
   products: Product[];
@@ -136,10 +137,20 @@ function ProductsGrid({ products, className = "" }: ProductsGridProps) {
       const p = {
         image: product?.image!,
         id: product?.id!,
+        name: product?.name!,
+        price: product?.price!,
+        quantity: 1,
       };
       if (product && !cart.cart.find((item) => item.id === productId)) {
         cart.setCart((prev) => [...prev, p as CartItem]);
+        cart.addToCart(p as CartItem);
       }
+      toast(
+        <span className="flex items-center gap-2">
+          <CheckCircle2 className="fill-green-500 text-white" />
+          {product?.name} added to cart
+        </span>
+      );
     },
     [products, cart]
   );

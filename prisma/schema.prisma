@@ -48,7 +48,7 @@ model CartItem {
   id        String  @id @default(cuid())
   cartId    String
   cart      Cart    @relation(fields: [cartId], references: [id])
-  productId String  @unique
+  productId String  
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   price     Int
