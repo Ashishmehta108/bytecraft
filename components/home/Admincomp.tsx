@@ -102,10 +102,9 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
   };
 
   return (
-    <div className="flex  items-center justify-evenly h-[500px] bg-background p-4">
+    <div className="flex md:flex-row flex-col items-center justify-center   md:items-center md:justify-evenly h-[500px] bg-background p-4">
       <div className="text-3xl font-semibold text-foreground max-w-md ">
-    Login using password , yoursecretpassword
-
+        Login using password , yoursecretpassword
       </div>
       <motion.div
         variants={containerVariants}
@@ -125,7 +124,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
               className="text-center"
             >
               <motion.div
-                className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6"
+                className="w-16 h-16 bg-zinc-100 dark:bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
@@ -144,11 +143,11 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 </svg>
               </motion.div>
 
-              <h2 className="text-2xl font-semibold text-zinc-900 mb-3">
+              <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-3">
                 Are you an admin?
               </h2>
 
-              <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+              <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed mb-8">
                 Click below to access the admin dashboard.
               </p>
 
@@ -156,7 +155,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setAdminStatus("prompt")}
-                className="w-full bg-indigo-600 hover:bg-indigo-500  cursor-pointer text-white py-3 px-6 rounded-xl font-medium text-sm transition-colors duration-200"
+                className="w-full bg-indigo-600 hover:bg-indigo-500  cursor-pointer text-white py-3 px-6 rounded-xl font-medium text-sm transition-colors duration-200 dark:bg-indigo-600 dark:hover:bg-indigo-500"
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 Yes, Login
@@ -196,7 +195,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 </svg>
               </motion.div>
 
-              <h2 className="text-2xl font-semibold text-zinc-900 mb-6">
+              <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-6">
                 Admin Login
               </h2>
 
@@ -206,7 +205,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password"
-                  className="w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all placeholder:text-zinc-400 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-800 duration-200"
                   autoFocus
                 />
               </div>
@@ -227,7 +226,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-indigo-600  cursor-pointer hover:bg-indigo-500 text-white py-3 px-6 rounded-xl font-medium text-sm transition-colors duration-200"
+                  className="w-full bg-indigo-600  cursor-pointer hover:bg-indigo-500 text-white py-3 px-6 rounded-xl font-medium text-sm transition-colors duration-200 dark:bg-indigo-600 dark:hover:bg-indigo-500"
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
                   Login
@@ -236,7 +235,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 <motion.button
                   type="button"
                   onClick={() => setAdminStatus("idle")}
-                  className="w-full text-zinc-500  cursor-pointer hover:text-zinc-700 py-2 text-sm font-medium transition-colors duration-200"
+                  className="w-full text-zinc-500  cursor-pointer hover:text-zinc-700 py-2 text-sm font-medium transition-colors duration-200 dark:text-zinc-400 dark:hover:text-zinc-300"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -256,9 +255,9 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
               exit="exit"
               className="text-center"
             >
-              <div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <motion.div
-                  className="w-6 h-6 border-2 border-zinc-300 border-t-zinc-600 rounded-full"
+                  className="w-6 h-6 border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-600 rounded-full"
                   animate={{ rotate: 360 }}
                   transition={{
                     duration: 1,
@@ -268,11 +267,11 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
                 />
               </div>
 
-              <h2 className="text-2xl font-semibold text-zinc-900 mb-3">
+              <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-3">
                 Verifying Access
               </h2>
 
-              <p className="text-zinc-500 text-sm leading-relaxed">
+              <p className="text-zinc-500 text-sm dark:text-zinc-400 leading-relaxed">
                 Checking your credentials...
               </p>
             </motion.div>
@@ -289,7 +288,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
               className="text-center"
             >
               <motion.div
-                className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6"
+                className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6"
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{
@@ -318,7 +317,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
               </motion.div>
 
               <motion.h2
-                className="text-2xl font-semibold text-zinc-900 mb-3"
+                className="text-2xl dark:text-zinc-100 font-semibold text-zinc-900 mb-3"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -327,7 +326,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
               </motion.h2>
 
               <motion.p
-                className="text-zinc-500 text-sm leading-relaxed mb-6"
+                className="text-zinc-500 text-sm dark:text-zinc-400 leading-relaxed mb-6"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
