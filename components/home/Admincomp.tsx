@@ -103,7 +103,7 @@ const AdminCheck: React.FC<AdminCheckProps> = ({
 
   return (
     <div className="flex md:flex-row flex-col items-center justify-center   md:items-center md:justify-evenly h-[500px] bg-background p-4">
-      <div className="md:text-3xl text-xl font-normal text-foreground max-w-md ">
+      <div className="md:text-3xl text-lg font-normal text-foreground max-w-sm ">
         Login using password , yoursecretpassword
       </div>
       <motion.div

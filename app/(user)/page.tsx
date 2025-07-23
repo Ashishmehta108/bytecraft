@@ -13,7 +13,7 @@ function HomPage() {
       </Suspense>
       <AdminCheck />
       <div className="text-center font-semibold text-2xl text-foreground">
-        Tech stack followed
+        Tech Architecture followed
       </div>
       <AnimatedBeamDemo />
       <Footer />
